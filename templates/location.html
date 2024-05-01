@@ -1,0 +1,28 @@
+<html>
+<body>
+    <h1>Weather App</h1>
+    <h2>Select a Location</h2>
+    <form action="/" method="get">
+        <label for="query">City:</label>
+        <input name="query" type="text" placeholder="Enter city name" value="{{.Query}}"/>
+        <button type="submit">Search</button>
+    </form>
+    {{if .Error}}
+        <div>Error: {{ .Error }}</div>
+    {{else if and .Query (eq .Count 0)}}
+        <div>No Results</div>
+    {{else if .Query}}
+        {{range $location := .Locations}}
+        <div>
+            <form action="/weather" method="get">
+                <input type="hidden" name="city" value="{{$location.Name}}" />
+                <input type="hidden" name="lat" value="{{$location.Latitude}}" />
+                <input type="hidden" name="long" value="{{$location.Longitude}}" />
+                <input type="hidden" name="tz" value="{{$location.Timezone}}" />
+                <button type="submit">{{$location.Province}} - {{$location.CountryCode}}</button>
+            </form>
+        </div>
+        {{end}}
+    {{end}}
+</body>
+</html>
